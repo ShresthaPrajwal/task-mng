@@ -1,12 +1,14 @@
 import { IRepository } from "../../shared/interfaces/IRepository";
 import { IUser } from "./interfaces/IUser";
+import { v4 as uuidv4 } from "uuid";
 
 export class UserRepository implements IRepository<IUser> {
   private users: IUser[] = [];
 
   async create(user: IUser): Promise<IUser> {
-    this.users.push(user);
-    return user;
+    const newUser = { ...user, id: uuidv4() }; // Generate a UUID
+    this.users.push(newUser);
+    return newUser;
   }
 
   async findById(id: string): Promise<IUser | null> {

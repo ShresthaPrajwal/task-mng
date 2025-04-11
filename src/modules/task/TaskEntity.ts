@@ -5,7 +5,7 @@ class Task extends Model {
   public id!: number;
   public title!: string;
   public description!: string;
-  public userId!: number; // Foreign key to associate tasks with users
+  public userId!: string; // Change to STRING to store UUIDs
 }
 
 Task.init(
@@ -24,7 +24,7 @@ Task.init(
       allowNull: false,
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING, // Change to STRING
       allowNull: false,
     },
   },
