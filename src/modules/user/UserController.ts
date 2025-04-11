@@ -1,8 +1,13 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "./UserEntity";
+import { UserService } from "./UserService";
+import { UserRepository } from "./UserRepository";
 import config from "../../config";
+
+// Initialize UserRepository and UserService
+const userRepository = new UserRepository();
+const userService = new UserService(userRepository);
 
 /**
  * @swagger
@@ -10,7 +15,6 @@ import config from "../../config";
  *   name: Users
  *   description: User management
  */
-
 class UserController {
   /**
    * @swagger
@@ -27,13 +31,13 @@ class UserController {
    *             properties:
    *               username:
    *                 type: string
-   *                 example: "john_doe" # Default value for username
+   *                 example: "john_doe"
    *               email:
    *                 type: string
-   *                 example: "john.doe@example.com" # Default value for email
+   *                 example: "john.doe@example.com"
    *               password:
    *                 type: string
-   *                 example: "password123" # Default value for password
+   *                 example: "password123"
    *     responses:
    *       201:
    *         description: User registered successfully
@@ -46,14 +50,13 @@ class UserController {
     const { username, email, password } = req.body;
 
     try {
-      const existingUser = await User.findOne({ where: { email } });
+      const existingUser = await userService.findUserByEmail(email);
       if (existingUser) {
         return res.status(400).json({ message: "Email already in use" });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
-
-      const newUser = await User.create({
+      const newUser = await userService.createUser({
         username,
         email,
         password: hashedPassword,
@@ -82,10 +85,10 @@ class UserController {
    *             properties:
    *               email:
    *                 type: string
-   *                 example: "john.doe@example.com" # Default value for email
+   *                 example: "john.doe@example.com"
    *               password:
    *                 type: string
-   *                 example: "password123" # Default value for password
+   *                 example: "password123"
    *     responses:
    *       200:
    *         description: Login successful
@@ -100,7 +103,7 @@ class UserController {
     const { email, password } = req.body;
 
     try {
-      const user = await User.findOne({ where: { email } });
+      const user = await userService.findUserByEmail(email);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }

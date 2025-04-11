@@ -1,36 +1,40 @@
-import { IUser } from '../interfaces/IUser';
-import { IRepository } from '../../shared/interfaces/IRepository';
+import { IRepository } from "../../shared/interfaces/IRepository";
+import { IUser } from "./interfaces/IUser";
 
 export class UserRepository implements IRepository<IUser> {
-    private users: IUser[] = [];
+  private users: IUser[] = [];
 
-    async create(user: IUser): Promise<IUser> {
-        this.users.push(user);
-        return user;
-    }
+  async create(user: IUser): Promise<IUser> {
+    this.users.push(user);
+    return user;
+  }
 
-    async findById(id: string): Promise<IUser | null> {
-        return this.users.find(user => user.id === id) || null;
-    }
+  async findById(id: string): Promise<IUser | null> {
+    return this.users.find((user) => user.id === id) || null;
+  }
 
-    async findAll(): Promise<IUser[]> {
-        return this.users;
-    }
+  async findByEmail(email: string): Promise<IUser | null> {
+    return this.users.find((user) => user.email === email) || null;
+  }
 
-    async update(id: string, userData: Partial<IUser>): Promise<IUser | null> {
-        const userIndex = this.users.findIndex(user => user.id === id);
-        if (userIndex === -1) return null;
+  async findAll(): Promise<IUser[]> {
+    return this.users;
+  }
 
-        const updatedUser = { ...this.users[userIndex], ...userData };
-        this.users[userIndex] = updatedUser;
-        return updatedUser;
-    }
+  async update(id: string, userData: Partial<IUser>): Promise<IUser | null> {
+    const userIndex = this.users.findIndex((user) => user.id === id);
+    if (userIndex === -1) return null;
 
-    async delete(id: string): Promise<boolean> {
-        const userIndex = this.users.findIndex(user => user.id === id);
-        if (userIndex === -1) return false;
+    const updatedUser = { ...this.users[userIndex], ...userData };
+    this.users[userIndex] = updatedUser;
+    return updatedUser;
+  }
 
-        this.users.splice(userIndex, 1);
-        return true;
-    }
+  async delete(id: string): Promise<boolean> {
+    const userIndex = this.users.findIndex((user) => user.id === id);
+    if (userIndex === -1) return false;
+
+    this.users.splice(userIndex, 1);
+    return true;
+  }
 }
