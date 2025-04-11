@@ -1,4 +1,5 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import config from "./config";
 import setupRoutes from "./routes";
 import { setupSwagger } from "./config/swagger";
@@ -16,6 +17,7 @@ class Server {
   private configureMiddleware() {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(cookieParser()); // Add this line to parse cookies
   }
 
   private setupRoutes() {

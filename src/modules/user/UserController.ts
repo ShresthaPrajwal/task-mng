@@ -27,10 +27,13 @@ class UserController {
    *             properties:
    *               username:
    *                 type: string
+   *                 example: "john_doe" # Default value for username
    *               email:
    *                 type: string
+   *                 example: "john.doe@example.com" # Default value for email
    *               password:
    *                 type: string
+   *                 example: "password123" # Default value for password
    *     responses:
    *       201:
    *         description: User registered successfully
@@ -79,8 +82,10 @@ class UserController {
    *             properties:
    *               email:
    *                 type: string
+   *                 example: "john.doe@example.com" # Default value for email
    *               password:
    *                 type: string
+   *                 example: "password123" # Default value for password
    *     responses:
    *       200:
    *         description: Login successful

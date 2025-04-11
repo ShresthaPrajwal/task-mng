@@ -10,8 +10,11 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const decoded = jwt.verify(token, config.jwtSecret);
-    req.user = decoded;
+    const decoded = jwt.verify(token, config.jwtSecret) as {
+      id: number;
+      email: string;
+    };
+    req.user = decoded; // Attach the user to the request object
     next();
   } catch (error) {
     res.status(401).json({ message: "Invalid token" });

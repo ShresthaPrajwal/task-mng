@@ -15,8 +15,25 @@ const swaggerOptions = {
         url: "http://localhost:3000", // Update this to match your server URL
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT", // Specify that it's a JWT token
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [], // Apply bearerAuth globally
+      },
+    ],
   },
-  apis: ["./src/modules/user/UserController.ts"], // Path to the API docs
+  apis: [
+    "./src/modules/user/UserController.ts", // User APIs
+    "./src/modules/task/TaskController.ts", // Task APIs
+  ],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
