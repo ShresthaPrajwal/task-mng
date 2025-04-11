@@ -1,17 +1,39 @@
-export class UserEntity {
-    id: string;
-    name: string;
-    email: string;
-    password: string;
-    createdAt: Date;
-    updatedAt: Date;
+import { DataTypes, Model } from "sequelize";
+import sequelize from "../../config/database";
 
-    constructor(id: string, name: string, email: string, password: string) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-    }
+class User extends Model {
+  public id!: number;
+  public username!: string;
+  public email!: string;
+  public password!: string;
 }
+
+User.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize,
+    modelName: "User",
+    tableName: "users",
+  }
+);
+
+export default User;
